@@ -1,6 +1,7 @@
 import enum
 
 from sqlalchemy import schema, types as sqltypes, util as sa_util, text
+from sqlalchemy import exc as exc_module
 from sqlalchemy.engine import default, reflection
 from sqlalchemy.sql import (
     compiler, elements
@@ -198,7 +199,17 @@ class ClickHouseDialect(default.DefaultDialect):
         else:
             qualified_name = quote(table_name)
         query = 'DESCRIBE TABLE {}'.format(qualified_name)
-        rows = self._execute(connection, query)
+        try:
+            rows = self._execute(connection, query)
+        except Exception as exc:
+            # Only a table that is confirmed absent becomes NoSuchTableError;
+            # any other failure is re-raised unchanged.
+            if isinstance(table_name, elements.TextClause) or \
+                    self._table_may_exist(connection, table_name, schema):
+                raise
+            name = '{}.{}'.format(schema, table_name) if schema \
+                else table_name
+            raise exc_module.NoSuchTableError(name) from exc
 
         return [
             self._get_column_info(
@@ -206,6 +217,12 @@ class ClickHouseDialect(default.DefaultDialect):
                 getattr(r, 'comment', None)
             ) for r in rows
         ]
+
+    def _table_may_exist(self, connection, table_name, schema):
+        try:
+            return self.has_table(connection, table_name, schema)
+        except Exception:
+            return True
 
     def _get_column_info(self, name, format_type, default_type,
                          default_expression, comment):

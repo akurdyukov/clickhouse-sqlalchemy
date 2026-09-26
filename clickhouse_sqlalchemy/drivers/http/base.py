@@ -43,7 +43,11 @@ class ClickHouseDialect_http(ClickHouseDialect):
 
         db_url = '%s://%s:%d/%s' % (protocol, url.host, port, endpoint)
 
-        return (db_url, db_name, url.username, url.password), kwargs
+        # A URL without credentials means the default user with an empty
+        # password; passing None would send the text "None" as basic auth.
+        username = url.username if url.username is not None else 'default'
+        password = url.password if url.password is not None else ''
+        return (db_url, db_name, username, password), kwargs
 
     def _execute(self, connection, sql, scalar=False, **kwargs):
         if isinstance(sql, str):
