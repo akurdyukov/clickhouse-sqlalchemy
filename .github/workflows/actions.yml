@@ -3,7 +3,6 @@ name: build
 jobs:
   tests:
     runs-on: ubuntu-24.04
-    continue-on-error: ${{ matrix.experimental }}
     strategy:
       fail-fast: false
       matrix:
@@ -12,7 +11,7 @@ jobs:
           - "3.12"
           - "3.13"
           - "3.14"
-        experimental: [false]
+          - "3.15"
         include:
           - clickhouse-version: 18.14.9
             clickhouse-org: yandex
@@ -22,10 +21,6 @@ jobs:
             clickhouse-org: clickhouse
           - clickhouse-version: 23.8.4.69
             clickhouse-org: clickhouse
-          - python-version: "3.15"
-            clickhouse-version: 23.8.4.69
-            clickhouse-org: clickhouse
-            experimental: true
     services:
       clickhouse-server:
         image: ${{ matrix.clickhouse-org }}/clickhouse-server:${{ matrix.clickhouse-version }}
@@ -35,12 +30,11 @@ jobs:
 
     name: ${{ matrix.python-version }} CH=${{ matrix.clickhouse-version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
-          allow-prereleases: ${{ matrix.experimental }}
           architecture: x64
       - name: Install test requirements
         run: |
