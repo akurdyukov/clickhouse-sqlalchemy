@@ -12,6 +12,7 @@
 - Python 3.13, 3.14 and 3.15 support.
 
 ### Changed
+- Published on PyPI as ``clickhouse-sqlalchemy-ng``, a maintained fork of ``clickhouse-sqlalchemy``. The ``clickhouse_sqlalchemy`` import name and ``clickhouse://`` URL schemes are unchanged.
 - Minimum supported Python version is 3.11.
 - Minimum supported ``asynch`` version is 0.2.5.
 - Missing table reflection raises ``NoSuchTableError`` instead of a driver error. Pull request [#406](https://github.com/xzkostyan/clickhouse-sqlalchemy/pull/406) by [aminghadersohi](https://github.com/aminghadersohi).

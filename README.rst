@@ -1,32 +1,51 @@
 ClickHouse SQLAlchemy
 =====================
 
-ClickHouse dialect for SQLAlchemy to `ClickHouse database <https://clickhouse.yandex/>`_.
+ClickHouse dialect for SQLAlchemy to `ClickHouse database <https://clickhouse.com/>`_.
+
+This is ``clickhouse-sqlalchemy-ng``, a maintained fork of
+`clickhouse-sqlalchemy <https://github.com/xzkostyan/clickhouse-sqlalchemy>`_
+by Konstantin Lebedev, which has had no release since 0.3.2. It keeps the
+``clickhouse_sqlalchemy`` import name and the ``clickhouse://`` URL schemes,
+so it is a drop-in replacement.
 
 
-.. image:: https://img.shields.io/pypi/v/clickhouse-sqlalchemy.svg
-    :target: https://pypi.org/project/clickhouse-sqlalchemy
+.. image:: https://img.shields.io/pypi/v/clickhouse-sqlalchemy-ng.svg
+    :target: https://pypi.org/project/clickhouse-sqlalchemy-ng
 
-.. image:: https://coveralls.io/repos/github/xzkostyan/clickhouse-sqlalchemy/badge.svg?branch=master
-    :target: https://coveralls.io/github/xzkostyan/clickhouse-sqlalchemy?branch=master
+.. image:: https://coveralls.io/repos/github/akurdyukov/clickhouse-sqlalchemy/badge.svg?branch=master
+    :target: https://coveralls.io/github/akurdyukov/clickhouse-sqlalchemy?branch=master
 
-.. image:: https://img.shields.io/pypi/l/clickhouse-sqlalchemy.svg
-    :target: https://pypi.org/project/clickhouse-sqlalchemy
+.. image:: https://img.shields.io/pypi/l/clickhouse-sqlalchemy-ng.svg
+    :target: https://pypi.org/project/clickhouse-sqlalchemy-ng
 
-.. image:: https://img.shields.io/pypi/pyversions/clickhouse-sqlalchemy.svg
-    :target: https://pypi.org/project/clickhouse-sqlalchemy
+.. image:: https://img.shields.io/pypi/pyversions/clickhouse-sqlalchemy-ng.svg
+    :target: https://pypi.org/project/clickhouse-sqlalchemy-ng
 
-.. image:: https://img.shields.io/pypi/dm/clickhouse-sqlalchemy.svg
-    :target: https://pypi.org/project/clickhouse-sqlalchemy
+.. image:: https://img.shields.io/pypi/dm/clickhouse-sqlalchemy-ng.svg
+    :target: https://pypi.org/project/clickhouse-sqlalchemy-ng
 
-.. image:: https://github.com/xzkostyan/clickhouse-sqlalchemy/actions/workflows/actions.yml/badge.svg
-   :target: https://github.com/xzkostyan/clickhouse-sqlalchemy/actions/workflows/actions.yml
+.. image:: https://github.com/akurdyukov/clickhouse-sqlalchemy/actions/workflows/actions.yml/badge.svg
+   :target: https://github.com/akurdyukov/clickhouse-sqlalchemy/actions/workflows/actions.yml
+
+
+Installation
+============
+
+    .. code-block:: bash
+
+        pip install clickhouse-sqlalchemy-ng
+
+Both packages install the same ``clickhouse_sqlalchemy`` module, so uninstall
+the original first: ``pip uninstall clickhouse-sqlalchemy``.
 
 
 Documentation
 =============
 
-Documentation is available at https://clickhouse-sqlalchemy.readthedocs.io.
+Documentation of the original project is available at
+https://clickhouse-sqlalchemy.readthedocs.io and applies to this fork; see
+`CHANGELOG.md <https://github.com/akurdyukov/clickhouse-sqlalchemy/blob/master/CHANGELOG.md>`_ for what changed since 0.3.2.
 
 
 Usage
