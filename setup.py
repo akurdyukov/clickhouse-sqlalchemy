@@ -44,6 +44,7 @@ setup(
 
     description='Simple ClickHouse SQLAlchemy Dialect',
     long_description=long_description,
+    long_description_content_type='text/x-rst',
 
     url=github_url,
 
