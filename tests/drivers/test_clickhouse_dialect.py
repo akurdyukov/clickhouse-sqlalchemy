@@ -156,6 +156,15 @@ class ClickHouseDialectTestCase(BaseTestCase):
         except ValueError as e:
             self.fail(f"Enum options parsing failed: {e}")
 
+    def test_map_type_with_comma_in_key_type(self):
+        coltype = self.dialect._get_column_type(
+            'col_name', "Map(Enum8('a' = 1, 'b' = 2), Map(String, UInt8))"
+        )
+        self.assertIsInstance(coltype, types.Map)
+        # Enum types are reflected as a factory callable
+        self.assertIsInstance(coltype.key_type(), types.Enum8)
+        self.assertIsInstance(coltype.value_type, types.Map)
+
 
 class ClickHouseAsynchDialectTestCase(BaseAsynchTestCase):
 
