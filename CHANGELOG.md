@@ -2,6 +2,34 @@
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-11-21
+### Added
+- JSON type. Pull request [#317](https://github.com/xzkostyan/clickhouse-sqlalchemy/pull/317) by [akkuman](https://github.com/akkuman). Solves issue [#199](https://github.com/xzkostyan/clickhouse-sqlalchemy/issues/199).
+- Named Tuple type. Pull request [#318](https://github.com/xzkostyan/clickhouse-sqlalchemy/pull/318) by [akkuman](https://github.com/akkuman).
+- [Native] ``query_id`` from ``execution_options``. Pull request [#322](https://github.com/xzkostyan/clickhouse-sqlalchemy/pull/322) by [Yedrimas](https://github.com/Yedrimas). Solves issue [#321](https://github.com/xzkostyan/clickhouse-sqlalchemy/issues/321).
+- [Asynch] Streaming results. Pull request [#323](https://github.com/xzkostyan/clickhouse-sqlalchemy/pull/323) by [Simon-Chenzw](https://github.com/Simon-Chenzw). Solves issue [#278](https://github.com/xzkostyan/clickhouse-sqlalchemy/issues/278).
+- [HTTP] UUID type. Pull request [#327](https://github.com/xzkostyan/clickhouse-sqlalchemy/pull/327) by [LemonPy29](https://github.com/LemonPy29).
+- Python 3.13, 3.14 and 3.15 support.
+
+### Changed
+- Minimum supported Python version is 3.11.
+- Minimum supported ``asynch`` version is 0.2.5.
+- Missing table reflection raises ``NoSuchTableError`` instead of a driver error. Pull request [#406](https://github.com/xzkostyan/clickhouse-sqlalchemy/pull/406) by [aminghadersohi](https://github.com/aminghadersohi).
+- [HTTP] URL without credentials uses the ``default`` user with an empty password. Pull request [#406](https://github.com/xzkostyan/clickhouse-sqlalchemy/pull/406) by [aminghadersohi](https://github.com/aminghadersohi). Solves issue [#387](https://github.com/xzkostyan/clickhouse-sqlalchemy/issues/387).
+
+### Fixed
+- [Asynch] Compatibility with ``asynch`` 0.2.5+. Pull request [#381](https://github.com/xzkostyan/clickhouse-sqlalchemy/pull/381) by [kusaku](https://github.com/kusaku). Solves issue [#374](https://github.com/xzkostyan/clickhouse-sqlalchemy/issues/374).
+- [Asynch] Compatibility with ``asynch`` 0.3.x and 0.4.x and SQLAlchemy 2.0.44+. Pull request [#401](https://github.com/xzkostyan/clickhouse-sqlalchemy/pull/401) by [kusaku](https://github.com/kusaku). Solves issues [#386](https://github.com/xzkostyan/clickhouse-sqlalchemy/issues/386), [#393](https://github.com/xzkostyan/clickhouse-sqlalchemy/issues/393), [#400](https://github.com/xzkostyan/clickhouse-sqlalchemy/issues/400).
+- [alembic] Compatibility with alembic 1.15+ and 1.18+. Pull request [#401](https://github.com/xzkostyan/clickhouse-sqlalchemy/pull/401) by [kusaku](https://github.com/kusaku). Solves issue [#368](https://github.com/xzkostyan/clickhouse-sqlalchemy/issues/368).
+- Division rendered as floor division in SQLAlchemy 2.0. Pull request [#372](https://github.com/xzkostyan/clickhouse-sqlalchemy/pull/372) by [poofeg](https://github.com/poofeg). Solves issue [#335](https://github.com/xzkostyan/clickhouse-sqlalchemy/issues/335).
+- Enum reflection with ``''`` or ``'mro'`` option names. Pull request [#337](https://github.com/xzkostyan/clickhouse-sqlalchemy/pull/337) by [alpolishchuk](https://github.com/alpolishchuk). Solves issue [#147](https://github.com/xzkostyan/clickhouse-sqlalchemy/issues/147).
+- Map reflection when the key type contains a comma. Pull request [#336](https://github.com/xzkostyan/clickhouse-sqlalchemy/pull/336) by [ehddnr301](https://github.com/ehddnr301). Solves issue [#269](https://github.com/xzkostyan/clickhouse-sqlalchemy/issues/269).
+- Statement cache warnings for ``Select`` and ``Lambda``. Pull request [#224](https://github.com/xzkostyan/clickhouse-sqlalchemy/pull/224) by [untername](https://github.com/untername).
+- ``engine_reflection`` URL parameter is no longer passed to the driver.
+
+### Removed
+- Python 3.7, 3.8, 3.9 and 3.10 support.
+
 ## [0.3.2] - 2024-06-12
 ### Added
 - ``quantile`` and ``quantileIf`` functions. Pull request [#303](https://github.com/xzkostyan/clickhouse-sqlalchemy/pull/303) by [aronbierbaum](https://github.com/aronbierbaum).
@@ -361,6 +389,9 @@ Log, TinyLog, Null.
 - Engines: MergeTree, CollapsingMergeTree, SummingMergeTree, Buffer, Memory. 
 
 [Unreleased]: https://github.com/xzkostyan/clickhouse-sqlalchemy/compare/0.3.2...HEAD
+[0.3.2]: https://github.com/xzkostyan/clickhouse-sqlalchemy/compare/0.3.1...0.3.2
+[Unreleased]: https://github.com/akurdyukov/clickhouse-sqlalchemy/compare/0.4.0...HEAD
+[0.4.0]: https://github.com/akurdyukov/clickhouse-sqlalchemy/compare/0.3.2...0.4.0
 [0.3.2]: https://github.com/xzkostyan/clickhouse-sqlalchemy/compare/0.3.1...0.3.2
 [0.3.1]: https://github.com/xzkostyan/clickhouse-sqlalchemy/compare/0.3.0...0.3.1
 [0.3.0]: https://github.com/xzkostyan/clickhouse-sqlalchemy/compare/0.2.7...0.3.0
