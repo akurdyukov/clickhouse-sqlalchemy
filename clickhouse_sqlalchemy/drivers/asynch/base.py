@@ -18,9 +18,12 @@ try:
 except Exception:
     _asynch_version = getattr(asynch, '__version__', None) or '0'
 
-_asynch_031 = tuple(
+# asynch 0.3.x substitutes parameters with str.format ({name}), while
+# earlier and 0.4.0+ releases use pyformat (%(name)s) like clickhouse-driver.
+_asynch_version_tuple = tuple(
     int(x) if x.isdigit() else 0 for x in str(_asynch_version).split('.')[:3]
-) >= (0, 3, 1)
+)
+_asynch_031 = (0, 3, 1) <= _asynch_version_tuple < (0, 4, 0)
 _pyformat_param_re = re.compile(r'%\(([^)]+)\)s')
 
 
