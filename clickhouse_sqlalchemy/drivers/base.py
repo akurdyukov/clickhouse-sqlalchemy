@@ -1,6 +1,7 @@
 import enum
 
 from sqlalchemy import schema, types as sqltypes, util as sa_util, text
+from sqlalchemy import exc as exc_module
 from sqlalchemy.engine import default, reflection
 from sqlalchemy.sql import (
     compiler, elements
@@ -94,6 +95,8 @@ class ClickHouseDialect(default.DefaultDialect):
     supports_native_enum = True  # Do not render check constraints on enums.
     supports_multivalues_insert = True
     supports_statement_cache = True
+
+    div_is_floordiv = False
 
     supports_comments = True
     inline_comments = True
@@ -196,7 +199,17 @@ class ClickHouseDialect(default.DefaultDialect):
         else:
             qualified_name = quote(table_name)
         query = 'DESCRIBE TABLE {}'.format(qualified_name)
-        rows = self._execute(connection, query)
+        try:
+            rows = self._execute(connection, query)
+        except Exception as exc:
+            # Only a table that is confirmed absent becomes NoSuchTableError;
+            # any other failure is re-raised unchanged.
+            if isinstance(table_name, elements.TextClause) or \
+                    self._table_may_exist(connection, table_name, schema):
+                raise
+            name = '{}.{}'.format(schema, table_name) if schema \
+                else table_name
+            raise exc_module.NoSuchTableError(name) from exc
 
         return [
             self._get_column_info(
@@ -204,6 +217,12 @@ class ClickHouseDialect(default.DefaultDialect):
                 getattr(r, 'comment', None)
             ) for r in rows
         ]
+
+    def _table_may_exist(self, connection, table_name, schema):
+        try:
+            return self.has_table(connection, table_name, schema)
+        except Exception:
+            return True
 
     def _get_column_info(self, name, format_type, default_type,
                          default_expression, comment):
@@ -282,10 +301,29 @@ class ClickHouseDialect(default.DefaultDialect):
         elif spec.startswith('Map'):
             inner = spec[4:-1]
             coltype = self.ischema_names['_map']
-            inner_types = [
-                self._get_column_type(name, t.strip())
-                for t in inner.split(',', 1)
-            ]
+
+            inner_types = []
+            bracket_level = 0
+            current_type = ''
+
+            for char in inner:
+                if char == ',' and bracket_level == 0:
+                    inner_types.append(
+                        self._get_column_type(name, current_type.strip())
+                    )
+                    current_type = ''
+                else:
+                    if char == '(':
+                        bracket_level += 1
+                    elif char == ')':
+                        bracket_level -= 1
+                    current_type += char
+
+            if current_type:
+                inner_types.append(
+                    self._get_column_type(name, current_type.strip())
+                )
+
             return coltype(*inner_types)
 
         elif spec.startswith('Enum'):
@@ -347,7 +385,16 @@ class ClickHouseDialect(default.DefaultDialect):
 
     @staticmethod
     def _parse_options(option_string):
-        options = dict()
+        def _fix_invalid_enum_option_name(option_name):
+            # Python Enum does not support blank string ("")
+            # or "mro" as option name
+            if option_name == '':
+                option_name = '_'
+            elif option_name == 'mro':
+                option_name = '__'
+            return option_name
+
+        options = {}
         after_name = False
         escaped = False
         quote_character = None
@@ -363,6 +410,7 @@ class ClickHouseDialect(default.DefaultDialect):
                 if ch in (' ', '='):
                     pass
                 elif ch == ',':
+                    name = _fix_invalid_enum_option_name(name)
                     options[name] = int(value)
                     after_name = False
                     name = ''
@@ -384,6 +432,7 @@ class ClickHouseDialect(default.DefaultDialect):
                     quote_character = ch
 
         if after_name:
+            name = _fix_invalid_enum_option_name(name)
             options.setdefault(name, int(value))  # Word after last comma
 
         return options

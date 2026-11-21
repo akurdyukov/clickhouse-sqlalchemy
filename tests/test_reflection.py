@@ -1,5 +1,6 @@
 import enum
 from sqlalchemy import Column, func, inspect, types as sa_types
+from sqlalchemy.exc import NoSuchTableError
 
 from clickhouse_sqlalchemy import types, engines, Table
 
@@ -9,6 +10,19 @@ from tests.util import require_server_version, with_native_and_http_sessions
 
 @with_native_and_http_sessions
 class ReflectionTestCase(BaseTestCase):
+    def test_missing_table_raises_no_such_table(self):
+        with self.assertRaises(NoSuchTableError):
+            Table(
+                'no_such_table', self.metadata(),
+                autoload_with=self.session.bind
+            )
+
+        with self.assertRaises(NoSuchTableError):
+            Table(
+                'no_such_table', self.metadata(), schema='no_such_database',
+                autoload_with=self.session.bind
+            )
+
     def test_server_default(self):
         metadata = self.metadata()
 
