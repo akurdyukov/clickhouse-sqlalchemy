@@ -2,16 +2,17 @@ on: [push, pull_request]
 name: build
 jobs:
   tests:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
+    continue-on-error: ${{ matrix.experimental }}
     strategy:
+      fail-fast: false
       matrix:
         python-version:
-          - "3.7"
-          - "3.8"
-          - "3.9"
-          - "3.10"
           - "3.11"
           - "3.12"
+          - "3.13"
+          - "3.14"
+        experimental: [false]
         include:
           - clickhouse-version: 18.14.9
             clickhouse-org: yandex
@@ -21,6 +22,10 @@ jobs:
             clickhouse-org: clickhouse
           - clickhouse-version: 23.8.4.69
             clickhouse-org: clickhouse
+          - python-version: "3.15"
+            clickhouse-version: 23.8.4.69
+            clickhouse-org: clickhouse
+            experimental: true
     services:
       clickhouse-server:
         image: ${{ matrix.clickhouse-org }}/clickhouse-server:${{ matrix.clickhouse-version }}
@@ -35,13 +40,14 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+          allow-prereleases: ${{ matrix.experimental }}
           architecture: x64
       - name: Install test requirements
         run: |
           pip install --upgrade pip setuptools wheel
           pip install flake8 flake8-print coverage
           python testsrequire.py
-          python setup.py develop
+          pip install -e .
           # Limit each test time execution.
           pip install pytest-timeout
       - name: Run flake8
@@ -49,30 +55,27 @@ jobs:
       - name: Run tests
         run: coverage run --source=clickhouse_sqlalchemy -m pytest --timeout=10 -v
         timeout-minutes: 2
-      - name: Set up Python for coverage submission
-        if: ${{ matrix.python-version == '2.7' }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.8
-          architecture: x64
-      - name: Install coveralls
-        run: |
-          # Newer coveralls do not work with github actions.
-          pip install 'coveralls<3.0.0'
+      - name: Generate coverage report
+        run: coverage xml
       - name: Upload coverage
-        run: coveralls
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          COVERALLS_PARALLEL: true
-          COVERALLS_FLAG_NAME: ${{ matrix.python-version }} CH=${{ matrix.clickhouse-version }}
+        # Not every fork is registered on coveralls.io.
+        continue-on-error: true
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          file: coverage.xml
+          parallel: true
+          flag-name: ${{ matrix.python-version }} CH=${{ matrix.clickhouse-version }}
 
   coveralls-finished:
     name: Indicate completion to coveralls.io
     needs: tests
+    if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
       - name: Finished
-        uses: coverallsapp/github-action@v2.3.3
+        continue-on-error: true
+        uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel-finished: true

@@ -6,7 +6,7 @@ Installation
 Python Version
 --------------
 
-Clickhouse-sqlalchemy supports Python 3.7 and newer.
+Clickhouse-sqlalchemy supports Python 3.11 and newer.
 
 Dependencies
 ------------

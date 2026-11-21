@@ -2,7 +2,7 @@ on: [push, pull_request]
 name: "SQLAlchemy >=2.0.0 versions"
 jobs:
   tests:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
@@ -30,7 +30,7 @@ jobs:
         run: |
           pip install --upgrade pip setuptools wheel
           python testsrequire.py
-          python setup.py develop
+          pip install -e .
           # Limit each test time execution.
           pip install pytest-timeout
       - name: Install SQLAlchemy
