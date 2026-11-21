@@ -34,7 +34,11 @@ The package can be installed using ``pip``:
 
     .. code-block:: bash
 
-       pip install clickhouse-sqlalchemy
+       pip install clickhouse-sqlalchemy-ng
+
+``clickhouse-sqlalchemy-ng`` is a maintained fork of ``clickhouse-sqlalchemy``
+and installs the same ``clickhouse_sqlalchemy`` module. Uninstall the original
+package first: ``pip uninstall clickhouse-sqlalchemy``.
 
 
 Installation from github
@@ -44,4 +48,4 @@ Development version can be installed directly from github:
 
     .. code-block:: bash
 
-       pip install git+https://github.com/xzkostyan/clickhouse-sqlalchemy@master#egg=clickhouse-sqlalchemy
+       pip install git+https://github.com/akurdyukov/clickhouse-sqlalchemy@master#egg=clickhouse-sqlalchemy-ng

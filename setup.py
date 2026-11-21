@@ -36,10 +36,10 @@ dialects = [
     ]
 ]
 
-github_url = 'https://github.com/xzkostyan/clickhouse-sqlalchemy'
+github_url = 'https://github.com/akurdyukov/clickhouse-sqlalchemy'
 
 setup(
-    name='clickhouse-sqlalchemy',
+    name='clickhouse-sqlalchemy-ng',
     version=read_version(),
 
     description='Simple ClickHouse SQLAlchemy Dialect',
