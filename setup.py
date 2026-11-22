@@ -51,7 +51,8 @@ setup(
     author='Konstantin Lebedev',
     author_email='kostyan.lebedev@gmail.com',
 
-    license='MIT',
+    license_expression='MIT',
+    license_files=['LICENSE'],
 
     classifiers=[
         'Development Status :: 4 - Beta',
@@ -62,9 +63,6 @@ setup(
 
         'Intended Audience :: Developers',
         'Intended Audience :: Information Technology',
-
-
-        'License :: OSI Approved :: MIT License',
 
 
         'Operating System :: OS Independent',
