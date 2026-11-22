@@ -48,8 +48,8 @@ setup(
 
     url=github_url,
 
-    author='Konstantin Lebedev',
-    author_email='kostyan.lebedev@gmail.com',
+    author='Konstantin Lebedev, Alik Kurdyukov',
+    author_email='kostyan.lebedev@gmail.com, alik@kurdyukov.com',
 
     license='MIT',
 
