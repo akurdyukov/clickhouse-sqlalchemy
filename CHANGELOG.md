@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-11-22
+### Changed
+- Package metadata uses the SPDX license expression ``MIT`` (PEP 639) instead of the deprecated license classifier. Building from source requires setuptools 77+.
+- Alik Kurdyukov added to package authors.
+
 ## [0.4.0] - 2026-11-21
 ### Added
 - JSON type. Pull request [#317](https://github.com/xzkostyan/clickhouse-sqlalchemy/pull/317) by [akkuman](https://github.com/akkuman). Solves issue [#199](https://github.com/xzkostyan/clickhouse-sqlalchemy/issues/199).
@@ -389,9 +394,8 @@ Log, TinyLog, Null.
 - Chunked `INSERT INTO` in one request.
 - Engines: MergeTree, CollapsingMergeTree, SummingMergeTree, Buffer, Memory. 
 
-[Unreleased]: https://github.com/xzkostyan/clickhouse-sqlalchemy/compare/0.3.2...HEAD
-[0.3.2]: https://github.com/xzkostyan/clickhouse-sqlalchemy/compare/0.3.1...0.3.2
-[Unreleased]: https://github.com/akurdyukov/clickhouse-sqlalchemy/compare/0.4.0...HEAD
+[Unreleased]: https://github.com/akurdyukov/clickhouse-sqlalchemy/compare/0.4.1...HEAD
+[0.4.1]: https://github.com/akurdyukov/clickhouse-sqlalchemy/compare/0.4.0...0.4.1
 [0.4.0]: https://github.com/akurdyukov/clickhouse-sqlalchemy/compare/0.3.2...0.4.0
 [0.3.2]: https://github.com/xzkostyan/clickhouse-sqlalchemy/compare/0.3.1...0.3.2
 [0.3.1]: https://github.com/xzkostyan/clickhouse-sqlalchemy/compare/0.3.0...0.3.1
